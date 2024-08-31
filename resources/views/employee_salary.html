@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Salary Registration</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/Employee_Registration.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- jQuery (dibutuhkan oleh Bootstrap dan Bootstrap Datepicker) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .container-fluid {
+            height: 100%;
+        }
+        .sidebar {
+            height: 100vh; /* Full viewport height */
+            background-color: #f8f9fa;
+            padding: 15px;
+            position: fixed; /* Fixed to keep it in place */
+            top: 0;
+            left: 0;
+            width: 250px; /* You can adjust the width as needed */
+        }
+        .container-fluid {
+            margin-left: 100px; /* Same width as sidebar to push content */
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <img width="100" height="100" src="https://i.pinimg.com/originals/e4/8a/b2/e48ab2e2e8055f15f04caf6968c1314a.png" alt="Deskripsi Gambar" class="custom-img">
+                </div>
+                <div class="col-md-9">
+                    <h1>MANAJEMEN PENGGAJIAN PEGAWAI</h1>
+                </div>
+            </div>
+        </div>
+        
+            <!-- <div class="logo">
+                <img width="100" height="100" src="https://i.pinimg.com/originals/e4/8a/b2/e48ab2e2e8055f15f04caf6968c1314a.png" alt="Company Logo">
+            </div>
+        <h1>
+            MANAGEMEN PENGGAJIAN PEGAWAI
+        </h1> -->
+    </header>
+    <div class="container-fluid">
+    <div class="card">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="col-md-3 col-lg-2 sidebar">
+        <h4>Menu</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="http://127.0.0.1:8000/employee_salary">Register Karyawan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:8000/table">Table Data Penggajian</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:8000/">Logout</a>
+            </li>
+
+        </ul>
+    </nav>
+    <form action="http://127.0.0.1:8000/api/test" method="post">
+        <div class="wrapper">
+            <div class="title">
+                FORM REGISTRASI GAJI KARYAWAN
+            </div>
+            <div class="form">
+                <h5>DATA PEGAWAI :</h5>
+                <div class="inputfield  ">
+                    <label>Nama</label>
+                    <input type="text" name="nama" class="input" required>
+                </div>
+                <div class="inputfield">
+                    <label>NIP</label>
+                    <input type="number" name="nip" class="input" id="inputNip">
+                </div>
+                <div class="inputfield">
+                    <label>Gaji Sekarang</label>
+                    <input type="number" name="gaji_sekarang" class="input" id="inputGajiSekarang">
+                </div>
+                <div class="inputfield">
+                    <label>Jabatan</label>
+                    <input type="text" name="jabatan" class="input" required>
+                </div>
+                <div class="inputfield">
+                    <label>Golongan</label>
+                    <input type="text" name="golongan" class="input" required>
+                </div>
+                <div class="inputfield">
+                    <label>Join Date</label>
+                    <input type="date" id="datePicker" name="join_date" class="form-control" placeholder="Pilih Tanggal dan Waktu">
+                </div>
+
+                <div class="inputfield">
+                    <label>TMT BERKALA</label>
+                    <input type="date" id="datePicker" name="tmt_berkala" class="form-control" placeholder="Pilih Tanggal dan Waktu">
+                </div>
+                
+                <div class="inputfield terms">
+                    <label class="check">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                    <p>Agreed to terms and conditions</p>
+                </div>
+                <div class="inputfield">
+                    <input type="submit" value="Register" class="btn">
+                </div>
+                <div class="inputfield">
+                    <input value="Delete" class="btn" id="btnDelete">
+                </div>
+                <p>Notes :</p>
+                <p>*untuk melakukan Delete Masukan NIP karyawan yang akan di delete</p>
+            </div>
+        </div>
+    </form>
+    </div>
+    </div>
+
+        
+    <script>
+        // Ketika di klik Button Delete, Akan melakukan Instruksi ke Server Mysql untuk hapus NIP sesuai Yang diinputkan di input NIP 
+        const button = document.getElementById('btnDelete');
+        button.addEventListener('click', function() {
+            const input=document.getElementById('inputNip');
+            const inputValue=input.value;
+
+            fetch(`http://127.0.0.1:8000/api/delete/${inputValue}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Tampilkan pesan dari server
+                alert("Data Berhasil Terhapus");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Untuk Mengeluarkan kalendar saat di klik Tanggal Join
+
+        $(document).ready(function(){
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd hh:ii', // Format tanggal dan waktu yang diinginkan
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true // Menampilkan AM/PM
+    });
+    });
+
+    </script>
+</body>
+
+</html>

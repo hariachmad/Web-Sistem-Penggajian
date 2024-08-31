@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Salary Registration</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/Employee_Registration.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- jQuery (dibutuhkan oleh Bootstrap dan Bootstrap Datepicker) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .container-fluid {
+            height: 100%;
+        }
+        .sidebar {
+            height: 100vh; /* Full viewport height */
+            background-color: #f8f9fa;
+            padding: 15px;
+            position: fixed; /* Fixed to keep it in place */
+            top: 0;
+            left: 0;
+            width: 250px; /* You can adjust the width as needed */
+        }
+        .table {
+            margin-left:150px; /* Same width as sidebar to push content */
+        }
+        .container-fluid {
+            margin-left: 100px; /* Same width as sidebar to push content */
+        }   
+    </style>
+</head>
+
+</head>
+
+<body>
+    <header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <img width="100" height="100" src="https://i.pinimg.com/originals/e4/8a/b2/e48ab2e2e8055f15f04caf6968c1314a.png" alt="Deskripsi Gambar" class="custom-img">
+                </div>
+                <div class="col-md-9">
+                    <h1>MANAJEMEN PENGGAJIAN PEGAWAI</h1>
+                </div>
+            </div>
+        </div>
+        
+    </header>
+        
+
+    <div class="container-fluid">
+            
+        
+        <div class="card">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 sidebar">
+                <h4>Menu</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="http://127.0.0.1:8000/employee_salary">Register Karyawan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/table">Table Data Penggajian</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/">Logout</a>
+                    </li>
+
+                </ul>
+            </nav>
+                <div class="card-header text-black text-center">
+                    <h5 class="card-title">TABLE PENGGAJIAN PEGAWAI</h5>
+                </div>
+            <div class="card-body"></div>
+                <div class="table-responsive">
+                    <table class="table" id="employees-table">
+                            <thead>
+                                <tr>
+                                <th scope="col">NAMA</th>
+                                <th scope="col">NIP</th>
+                                <th scope="col">GAJI SEKARANG</th>
+                                <th scope="col">GOLONGAN</th>
+                                <th scope="col">JOIN DATE</th>
+                                <th scope="col">Masa Kerja (tahun)</th>
+                                <th scope="col">TMT BERKALA</th>
+                                <th scope="col">TMT BERIKUT</th>
+                                <th scope="col">JABATAN</th>
+                                <th scope="col">Aksi</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+    <script>
+        function handleClick(props) {
+            fetch(`http://127.0.0.1:8000/api/delete/${props}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Tampilkan pesan dari server
+                alert(`Data dengan NIP ${props} Berhasil Terhapus`);
+                window.location.href="http://127.0.0.1:8000/table";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function selisihTanggal(arg_tanggal_satu,arg_tanggal_dua){
+            let tanggal_satu=new Date(arg_tanggal_satu);
+            let tanggal_dua=new Date(arg_tanggal_dua);
+
+            let count_tanggal_satu=(tanggal_satu.getFullYear()+tanggal_satu.getMonth()+tanggal_satu.getDate())
+            let count_tanggal_dua=(tanggal_dua.getFullYear()+tanggal_dua.getMonth()+tanggal_dua.getDate());
+            return count_tanggal_satu-count_tanggal_dua
+        }
+
+        function masakerja(joinDate){
+            let join_date=joinDate;
+            let tanggal=String(join_date);
+            const tanggal_join =new Date(tanggal);
+            const today = new Date();
+            const yearsDifference=getYearsDifference(tanggal_join,today);
+            return yearsDifference;
+        }
+        function tmtBerkala(joinDate,paramMasakerja){
+            let join_date=joinDate;
+            let tanggal=String(join_date);
+            const tanggal_join =new Date(tanggal);
+
+
+            if (paramMasakerja % 2 ===0 ){
+                return `${tanggal_join.getDate()}-${tanggal_join.getMonth()+1}-2022`
+            }else if(paramMasakerja % 2 ===1){
+                return `${tanggal_join.getDate()}-${tanggal_join.getMonth()+1}-2023`
+            }else{
+                return "-"
+            }
+        }
+
+        function tmtBerikut(tmtBerkala){
+            let Tanggal=new Date(tmtBerkala);
+            Tanggal.setFullYear(Tanggal.getFullYear()+2);
+
+            const year=Tanggal.getFullYear();
+            const month = (Tanggal.getMonth() + 1).toString().padStart(2, '0');
+            const day = Tanggal.getDate().toString().padStart(2, '0');
+
+            return `${year}-${month}-${day}`;
+        }
+
+
+        function getYearsDifference(startDate, endDate) {
+        // Menghitung selisih tahun
+        let yearsDifference = endDate.getFullYear() - startDate.getFullYear();
+    
+        // Memperhitungkan bulan dan hari untuk akurasi
+        const startMonth = startDate.getMonth();
+        const endMonth = endDate.getMonth();
+        const startDay = startDate.getDate();
+        const endDay = endDate.getDate();
+
+        if (endMonth < startMonth || (endMonth === startMonth && endDay < startDay)) {
+            yearsDifference--;
+        }
+
+        return yearsDifference;
+        }
+
+        function hitung_constanta_tanggal(tanggal_tmt,tanggal_sekarang){
+            let tanggal_tmt_new=new Date(tanggal_tmt);
+            let tanggal_sekarang_new=new Date(tanggal_sekarang);
+
+            const timeDiff = tanggal_tmt_new.getTime() - tanggal_sekarang_new.getTime();
+            const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            return daysDiff;
+        }
+
+        // Ambil data pegawai dari API
+        fetch('http://127.0.0.1:8000/api/employee')
+            .then(response => response.json(    ))
+            .then(data => {
+                const tableBody = document.querySelector('#employees-table tbody');
+                
+                data.forEach(employee => {
+                    const row = document.createElement('tr');
+                    const formatter = new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0, // Mengatur jumlah digit desimal
+                    maximumFractionDigits: 0
+                    });
+
+                    row.innerHTML = `
+                        <td>${employee.nama}</td>
+                        <td>${employee.nip}</td>
+                        <td>${formatter.format(employee.gaji_sekarang)}</td>
+                        <td>${employee.golongan}</td>
+                        <td>${String(employee.join_date).substring(0,10)}</td>
+                        <td>${masakerja(employee.join_date)}</td>
+                        <td>${employee.tmt_berkala}</td>
+                        <td>${tmtBerikut(employee.tmt_berkala)}</td>
+                        <td>${employee.jabatan}</td>
+                        <td>
+                                    <img width="30" height="30" src="https://cdn-icons-png.flaticon.com/512/5996/5996831.png">
+                                    <img onclick="handleClick(${employee.nip})" width="30" height="30" src="https://cdn-icons-png.flaticon.com/512/6048/6048190.png">
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+            fetch('http://127.0.0.1:8000/api/employee')
+            .then(response => response.json(    ))
+            .then(data => {
+
+                let tanggal_terdekat={};
+                
+                data.forEach(employee => {
+                    let sekarang=new Date();
+                    let tmt_berkala_new=new Date(String(employee.tmt_berkala));
+                    tmt_berkala_new.setFullYear(tmt_berkala_new.getFullYear()+2);
+                    let nama=String(employee.nama);
+
+                    let selisih_hari=hitung_constanta_tanggal(tmt_berkala_new,sekarang);
+                    console.log(selisih_hari);
+
+                    if (selisih_hari<62){
+                        tanggal_terdekat[employee.nama]=`${tmt_berkala_new.getFullYear()}-${(tmt_berkala_new.getMonth()+1).toString().padStart(2,'0')}-${tmt_berkala_new.getDate().toString().padStart(2,'0')}`;
+                    }
+                    
+
+                });
+
+                let string_alert=""
+                for (let key in tanggal_terdekat){
+                    string_alert+=`${key} : ${tanggal_terdekat[key]}`+"\n"
+                }
+
+                alert("Tanggal Tmt Terdekat : \n"+string_alert);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+
+
+
+    </script>    
+
+</body>
+
+</html>
